@@ -26,7 +26,7 @@ GameObjectManager GAME_OBJ_MNG;
 std::shared_ptr<GameObject> player;
 std::shared_ptr<FlappyBirdPlayer> flappyBirdPlayer;
 Vector2D camera_position;
-ColumnFactory factrory = ColumnFactory(100, 200, 400, 0x00FFFFFF);
+ColumnFactory factrory = ColumnFactory(100, 200, 400, 0x0000FF00);
 int64_t score = 0;
 int64_t distanceCounter = -1;
 
@@ -74,6 +74,14 @@ void draw()
 {
     // clear backbuffer
     memset(buffer, 0, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(uint32_t));
+
+    // background // TODO сделать отдельного наследника класса Drawable который будет
+    // рисовать объекты по своим локальным координатам.
+    for (int i = 0; i < SCREEN_HEIGHT; ++i) {
+        for (int j = 0; j < SCREEN_WIDTH; ++j) {
+            buffer[i][j] = 0x00FFFFFF;
+        }
+    }
 
     // draw
     GAME_OBJ_MNG.renderObjects(camera_position);
