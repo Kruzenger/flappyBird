@@ -9,7 +9,7 @@ class FlappyBirdPlayer : public Component {
     
     inline virtual std::string getTypeName() const override { return "FlappyBirdPlayer"; }
     inline void addCollider(std::shared_ptr<BoxCollider> playerCollider) { p_collider = playerCollider; }  
-    inline bool isAlive() const { return p_collider->getCollisions().empty(); }
+    bool isAlive() const;
     void actionJump() const;
 
   protected:
