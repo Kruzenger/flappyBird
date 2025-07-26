@@ -39,7 +39,7 @@ void initialize()
     player->addComponent(std::make_shared<BoxCollider>(50, 50));
     player->addComponent(std::make_shared<Rigidbody2D>(true));
     player->addComponent(flappyBirdPlayer = std::make_shared<FlappyBirdPlayer>());
-    player->setPosition(400, SCREEN_HEIGHT / 2);
+    player->setLocalPosition(400, SCREEN_HEIGHT / 2);
     GAME_OBJ_MNG.addObject(player);
 }
 
@@ -61,7 +61,7 @@ void act(float dt)
     if(score / 10 > distanceCounter) {
         ++distanceCounter;
         auto obj = factrory.create(300, 150 + (50 * (std::rand() % 6)));
-        obj->setPosition(Vector2D(1000 * (score / 10) + 1100, 0));
+        obj->setLocalPosition(Vector2D(1000 * (score / 10) + 1100, 0));
         GAME_OBJ_MNG.addObject(obj);
     }
 

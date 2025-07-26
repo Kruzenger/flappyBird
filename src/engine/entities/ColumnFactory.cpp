@@ -22,12 +22,12 @@ std::shared_ptr<GameObject> ColumnFactory::create(const uint64_t& gap_hight, con
     std::shared_ptr<GameObject> upper_column = std::make_shared<GameObject>();
     upper_column->addComponent(std::make_shared<Rectangle>(SCREEN_HEIGHT, p_default_width, p_default_color));
     upper_column->addComponent(std::make_shared<BoxCollider>(SCREEN_HEIGHT, p_default_width));
-    upper_column->setPosition(0, -static_cast<int64_t>(SCREEN_HEIGHT - gap_pos));
+    upper_column->setLocalPosition(0, -static_cast<int64_t>(SCREEN_HEIGHT - gap_pos));
 
     std::shared_ptr<GameObject> lower_column = std::make_shared<GameObject>();
     lower_column->addComponent(std::make_shared<Rectangle>(SCREEN_HEIGHT, p_default_width, p_default_color));
     lower_column->addComponent(std::make_shared<BoxCollider>(SCREEN_HEIGHT, p_default_width));
-    lower_column->setPosition(0, static_cast<int64_t>(gap_pos + gap_hight));
+    lower_column->setLocalPosition(0, static_cast<int64_t>(gap_pos + gap_hight));
 
     column->addChild(upper_column);
     column->addChild(lower_column);

@@ -24,9 +24,9 @@ class GameObject : public std::enable_shared_from_this<GameObject> {
 
     const Vector2D& changePosition(const Vector2D& delta_pos);
     const Vector2D& changePosition(const int64_t& delta_x, const int64_t& delta_y);
-    const Vector2D& setPosition(const Vector2D& newPos);
-    inline const Vector2D& setGlobalPosition(const Vector2D& newPos) { return p_globalPosition = newPos; }
-    const Vector2D& setPosition(const int64_t& new_x, const int64_t& new_y);
+    const Vector2D& setLocalPosition(const Vector2D& newPos);
+    const Vector2D& setLocalPosition(const int64_t& new_x, const int64_t& new_y);
+    const Vector2D& setGlobalPosition(const Vector2D& newPos);
     inline const Vector2D& getLocalPosition() const { return p_localPosition; }
     inline const Vector2D& getGlobalPosition() const { return p_globalPosition; }
 

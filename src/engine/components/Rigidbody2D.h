@@ -12,15 +12,11 @@ class Rigidbody2D : public Component {
     Rigidbody2D() = default;
     Rigidbody2D(bool isAffectedByPhisics);
 
-    void simulatePhysics(const float& dt);
-
-    inline virtual std::string getTypeName() const override {
-        return "Rigidbody2D";
-    }
-
+    inline virtual std::string getTypeName() const override { return "Rigidbody2D"; }
     inline void setVelocity(const Vector2D& value) { p_velocity = value; }
     inline const Vector2D& getVelocity() { return p_velocity; }
-
+    void simulatePhysics(const float& dt);
+    
   protected:
     bool p_isAffectedByGravity = true;  
     Vector2D p_velocity = kStartVelocity;

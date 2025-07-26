@@ -8,7 +8,6 @@ class Rectangle : public Drawable {
     Rectangle(const uint64_t& hight, const uint64_t& length, const uint32_t& color = 0);
 
     inline virtual std::string getTypeName() const override { return "Rectangle"; }
-
     virtual void draw(Vector2D offset) override;
 
   protected:

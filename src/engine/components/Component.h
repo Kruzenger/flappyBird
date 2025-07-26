@@ -9,11 +9,9 @@ class Component : public std::enable_shared_from_this<Component> {
   public:
     virtual ~Component() = 0;
 
-    virtual void onParentGameObjectInit() {}
-    
-    bool isDrawable() const;
     inline virtual std::string getTypeName() const = 0;
-
+    virtual void onParentGameObjectInit() {}
+    bool isDrawable() const;
     void setParentObject(std::shared_ptr<GameObject> object);
     
   protected:

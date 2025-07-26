@@ -15,7 +15,6 @@ class BoxCollider : public Component {
     void addCollision(std::shared_ptr<BoxCollider> collision);
     bool checkCollision(std::shared_ptr<BoxCollider> other) const;
     inline std::vector<std::shared_ptr<BoxCollider>>& getCollisions() { return p_collisions; }
-
     inline virtual std::string getTypeName() const override { return "BoxCollider"; }
 
   protected:

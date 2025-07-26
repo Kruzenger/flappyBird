@@ -28,13 +28,15 @@ const Vector2D& GameObject::changePosition(const Vector2D& delta_pos) {
     return p_localPosition;
 }
 
-const Vector2D& GameObject::setPosition(const Vector2D& new_pos) {
+const Vector2D& GameObject::setLocalPosition(const Vector2D& new_pos) {
     p_localPosition = new_pos;
     return p_localPosition;
 }
 
-const Vector2D& GameObject::setPosition(const int64_t& new_x, const int64_t& new_y) {
+const Vector2D& GameObject::setLocalPosition(const int64_t& new_x, const int64_t& new_y) {
     p_localPosition.x = new_x;
     p_localPosition.y = new_y;
     return p_localPosition;
 }
+
+const Vector2D& GameObject::setGlobalPosition(const Vector2D& newPos) { return p_globalPosition = newPos; }

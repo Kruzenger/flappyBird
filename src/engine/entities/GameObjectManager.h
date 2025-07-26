@@ -12,8 +12,6 @@ class GameObjectManager: public Singleton<GameObjectManager> {
     void updateCollisions();
     void simulatePhysics(const float& dt);
 
-    void updateGlobalPositionRecursivly(std::shared_ptr<GameObject> gameObject, const Vector2D& offset) const;
-  
   private:
     std::shared_ptr<GameObject> _rootGameObject = std::make_shared<GameObject>();
     std::vector<std::shared_ptr<GameObject>> _colideableObjects;
@@ -21,4 +19,5 @@ class GameObjectManager: public Singleton<GameObjectManager> {
 
     void updateCollideableObjectsRecursivly(std::shared_ptr<GameObject> gameObject);
     void updateRigidbodyObjectsRecursivly(std::shared_ptr<GameObject> gameObject);
+    void updateGlobalPositionRecursivly(std::shared_ptr<GameObject> gameObject, const Vector2D& offset) const;
 };
