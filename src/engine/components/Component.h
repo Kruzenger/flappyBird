@@ -2,9 +2,10 @@
 
 #include <cstdint>
 #include <string>
+#include <memory>
 
 class GameObject;
-class Component {
+class Component : public std::enable_shared_from_this<Component> {
   public:
     virtual ~Component() = 0;
 
@@ -13,10 +14,10 @@ class Component {
     bool isDrawable() const;
     inline virtual std::string getTypeName() const = 0;
 
-    void setParentObject(GameObject* object);
+    void setParentObject(std::shared_ptr<GameObject> object);
     
   protected:
-    GameObject* p_parentObject;
+    std::shared_ptr<GameObject> p_parentObject;
 };
 
 inline Component::~Component() {}

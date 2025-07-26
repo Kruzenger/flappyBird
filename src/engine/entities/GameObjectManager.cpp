@@ -11,7 +11,7 @@ void GameObjectManager::renderObjects(const Vector2D& camera_pos) {
 // TODO: Убрать зависимость от порядка добавления свойств. Нужно сделать
 // отдельный метод с добавлением и обработкой всех полей и свойств, а при
 // добавлении объекта в обработку и про добавлении новых компанент вызывать его.
-void GameObjectManager::addObject(GameObject* object) {
+void GameObjectManager::addObject(std::shared_ptr<GameObject> object) {
     _rootGameObject->addChild(object);
     updateRigidbodyObjectsRecursivly(object);
     updateCollideableObjectsRecursivly(object);
@@ -20,17 +20,17 @@ void GameObjectManager::addObject(GameObject* object) {
 
 void GameObjectManager::updateCollisions() {
     for(auto object : _colideableObjects) {
-        BoxCollider* collider = object->findComponentByTypeName<BoxCollider>("BoxCollider");
+        std::shared_ptr<BoxCollider> collider = object->findComponentByTypeName<BoxCollider>("BoxCollider");
         collider->clearCollisions();
     }
 
     for(auto object1 : _colideableObjects) {
-        BoxCollider* collider1 = object1->findComponentByTypeName<BoxCollider>("BoxCollider");
+        std::shared_ptr<BoxCollider> collider1 = object1->findComponentByTypeName<BoxCollider>("BoxCollider");
         for(auto object2 : _colideableObjects) {
             if(object1 == object2)
                 continue;
                 
-            BoxCollider* collider2 = object2->findComponentByTypeName<BoxCollider>("BoxCollider");
+            std::shared_ptr<BoxCollider> collider2 = object2->findComponentByTypeName<BoxCollider>("BoxCollider");
             if(collider1->checkCollision(collider2)) {
                 collider1->addCollision(collider2);
                 collider2->addCollision(collider1);
@@ -45,7 +45,7 @@ void GameObjectManager::simulatePhysics(const float& dt) {
     }
 }
 
-void GameObjectManager::updateCollideableObjectsRecursivly(GameObject* gameObject) {
+void GameObjectManager::updateCollideableObjectsRecursivly(std::shared_ptr<GameObject> gameObject) {
     if(gameObject) {
         if(gameObject->findComponentByTypeName<BoxCollider>("BoxCollider")){
             _colideableObjects.push_back(gameObject);
@@ -58,7 +58,7 @@ void GameObjectManager::updateCollideableObjectsRecursivly(GameObject* gameObjec
     }
 }
 
-void GameObjectManager::updateRigidbodyObjectsRecursivly(GameObject* gameObject) {
+void GameObjectManager::updateRigidbodyObjectsRecursivly(std::shared_ptr<GameObject> gameObject) {
     if(gameObject) {
         if(gameObject->findComponentByTypeName<Rigidbody2D>("Rigidbody2D")){
             _rigidbodyObjects.push_back(gameObject);
@@ -71,7 +71,7 @@ void GameObjectManager::updateRigidbodyObjectsRecursivly(GameObject* gameObject)
     }
 }
 
-void GameObjectManager::updateGlobalPositionRecursivly(GameObject* gameObject, const Vector2D& offset) const {
+void GameObjectManager::updateGlobalPositionRecursivly(std::shared_ptr<GameObject> gameObject, const Vector2D& offset) const {
     if(gameObject) {
         gameObject->setGlobalPosition(gameObject->getLocalPosition() + offset);
         for(auto object : gameObject->getChildren()) {

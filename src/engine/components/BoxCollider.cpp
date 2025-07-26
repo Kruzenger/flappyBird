@@ -6,11 +6,11 @@ BoxCollider::BoxCollider(const Vector2D& lu_corner, const Vector2D& rd_corner):
 BoxCollider::BoxCollider(const uint64_t& hight, const uint64_t& width):
     p_lu_corner(0, 0), p_rd_corner(width, hight) {}
 
-void BoxCollider::addCollision(BoxCollider* collision) {
+void BoxCollider::addCollision(std::shared_ptr<BoxCollider> collision) {
     p_collisions.push_back(collision);
 }
 
-bool BoxCollider::checkCollision(BoxCollider* other) const {
+bool BoxCollider::checkCollision(std::shared_ptr<BoxCollider> other) const {
     Vector2D lu_corner = p_lu_corner + p_parentObject->getGlobalPosition();
     Vector2D rd_corner = p_rd_corner + p_parentObject->getGlobalPosition();
     Vector2D other_lu_corner = other->p_lu_corner + other->p_parentObject->getGlobalPosition();

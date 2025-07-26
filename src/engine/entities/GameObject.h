@@ -4,18 +4,19 @@
 #include "../Geometry.h"
 #include <vector>
 #include <string>
+#include <memory>
 
-class GameObject {
+class GameObject : public std::enable_shared_from_this<GameObject> {
   public:
     void render(Vector2D offset);
-    void addComponent(Component* component);
-    void addChild(GameObject* child);
+    void addComponent(std::shared_ptr<Component> component);
+    void addChild(std::shared_ptr<GameObject> child);
 
     template <typename T>
-    T* findComponentByTypeName(const std::string& typeName) const {
+    std::shared_ptr<T> findComponentByTypeName(const std::string& typeName) const {
         for(auto component : p_components) {
             if(component->getTypeName() == typeName) {
-                return dynamic_cast<T*>(component);
+                return std::dynamic_pointer_cast<T>(component);
             }
         }
         return nullptr; 
@@ -31,11 +32,11 @@ class GameObject {
 
     bool CheckCollision();
     inline const int64_t& getPriority() const {return p_priority; }
-    inline std::vector<GameObject*>& getChildren() { return p_children; }
+    inline std::vector<std::shared_ptr<GameObject>>& getChildren() { return p_children; }
     
   protected:
-    std::vector<Component*> p_components;
-    std::vector<GameObject*> p_children;
+    std::vector<std::shared_ptr<Component>> p_components;
+    std::vector<std::shared_ptr<GameObject>> p_children;
     Vector2D p_localPosition;
     Vector2D p_globalPosition;
 

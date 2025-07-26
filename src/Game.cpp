@@ -8,6 +8,7 @@
 #include "./engine/components/Rectangle.h"
 #include "./engine/components/Rigidbody2D.h"
 #include "./engine/components/FlappyBirdPlayer.h"
+#include <memory>
 
 //
 //  You are free to modify this file
@@ -22,8 +23,8 @@
 //  left button, 1 - right button) schedule_quit_game() - quit game after act()
 
 GameObjectManager GAME_OBJ_MNG;
-GameObject* player;
-FlappyBirdPlayer* flappyBirdPlayer;
+std::shared_ptr<GameObject> player;
+std::shared_ptr<FlappyBirdPlayer> flappyBirdPlayer;
 Vector2D camera_position;
 ColumnFactory factrory = ColumnFactory(100, 200, 400, 0x00FFFFFF);
 int64_t score = 0;
@@ -33,11 +34,11 @@ int64_t distanceCounter = -1;
 void initialize()
 {
     camera_position = Vector2D(0, 0);
-    player = new GameObject();
-    player->addComponent(new Rectangle(50, 50, 0x00FF0000));
-    player->addComponent(new BoxCollider(50, 50));
-    player->addComponent(new Rigidbody2D(true));
-    player->addComponent(flappyBirdPlayer = new FlappyBirdPlayer());
+    player = std::make_shared<GameObject>();
+    player->addComponent(std::make_shared<Rectangle>(50, 50, 0x00FF0000));
+    player->addComponent(std::make_shared<BoxCollider>(50, 50));
+    player->addComponent(std::make_shared<Rigidbody2D>(true));
+    player->addComponent(flappyBirdPlayer = std::make_shared<FlappyBirdPlayer>());
     player->setPosition(400, SCREEN_HEIGHT / 2);
     GAME_OBJ_MNG.addObject(player);
 }

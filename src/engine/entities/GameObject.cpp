@@ -4,7 +4,7 @@
 void GameObject::render(Vector2D offset) {
     for(auto component : p_components) {
         if(component->isDrawable()) {
-            dynamic_cast<Drawable*>(component)->draw(offset);
+            dynamic_pointer_cast<Drawable>(component)->draw(offset);
         }
     }
 
@@ -13,12 +13,12 @@ void GameObject::render(Vector2D offset) {
     }
 }
 
-void GameObject::addComponent(Component* component) {
+void GameObject::addComponent(std::shared_ptr<Component> component) {
     p_components.push_back(component);
-    component->setParentObject(this);
+    component->setParentObject(shared_from_this());
 }
 
-void GameObject::addChild(GameObject* child) {
+void GameObject::addChild(std::shared_ptr<GameObject> child) {
     p_children.push_back(child);
 }
 

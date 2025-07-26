@@ -11,8 +11,8 @@ class ColumnFactory : public AbstractFactory<GameObject> {
             const uint64_t& default_gap_position, 
             const uint32_t& default_color);
 
-    GameObject* create() override;
-    GameObject* create(const uint64_t& gap_hight, const uint64_t& gap_pos);
+    std::shared_ptr<GameObject> create() override;
+    std::shared_ptr<GameObject> create(const uint64_t& gap_hight, const uint64_t& gap_pos);
     
   protected:
     uint64_t p_default_width;
