@@ -6,5 +6,5 @@ void FlappyBirdPlayer::onParentGameObjectInit() {
 }
 
 void FlappyBirdPlayer::actionJump() const { 
-    p_rigidbody->setVelocity(Vector2D(p_rigidbody->getVelocity().x, -35)); 
+    p_rigidbody->setVelocity(Vector2D(p_rigidbody->getVelocity().x, 35)); 
 }

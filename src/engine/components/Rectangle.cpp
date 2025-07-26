@@ -10,7 +10,7 @@ void Rectangle::draw(Vector2D offset) {
     for(; i < offset.y + static_cast<int64_t>(p_hight) && i < SCREEN_HEIGHT; ++i) {
         int64_t j = offset.x > 0 ? offset.x : 0;
         for(; j < offset.x + static_cast<int64_t>(p_width) && j < SCREEN_WIDTH; ++j) {
-            buffer[i][j] = p_color;
+            buffer[SCREEN_HEIGHT - i - 1][j] = p_color;
         }
     }
 }
