@@ -6,6 +6,7 @@
 #include "./engine/entities/ColumnFactory.h"
 #include "./engine/entities/GameObjectManager.h"
 #include "./engine/components/Rectangle.h"
+#include "./engine/components/UIRectangle.h"
 #include "./engine/components/Rigidbody2D.h"
 #include "./engine/components/FlappyBirdPlayer.h"
 #include <memory>
@@ -33,7 +34,8 @@ enum EColors {
     red = 0x00FF0000,
     green = 0x0000FF00,
     blue = 0x000000FF,
-    white = 0x00FFFFFF
+    white = 0x00FFFFFF,
+    black = 0x00000000
 };
 
 const int32_t kPlayerColor = EColors::red;
@@ -67,6 +69,11 @@ void initialize()
     player->addComponent(flappyBirdPlayer = std::make_shared<FlappyBirdPlayer>());
     player->setLocalPosition(kPlayerStartPosition);
     GameObjectManager::getInstance().addObject(player);
+
+    auto scoreBaner = std::make_shared<GameObject>();
+    scoreBaner->addComponent(std::make_shared<RectangleUI>(50, 300, EColors::black));
+    scoreBaner->setLocalPosition(50, SCREEN_HEIGHT - 100);
+    GameObjectManager::getInstance().addObjectUI(scoreBaner);
 }
 
 // this function is called to update game data,
@@ -83,7 +90,7 @@ void act(float dt)
         jumpTimeoutUntil = camera->getGlobalPosition().x + kJumpTimeoutSize;
     }
 
-    camera->setGlobalPosition(Vector2D(player->getGlobalPosition().x - (SCREEN_WIDTH / 2), 0)); 
+    camera->setGlobalPosition(Vector2D(player->getGlobalPosition().x - (SCREEN_WIDTH / 2), 0));
 
     score = (camera->getGlobalPosition().x / 100);
     if(score / (kColumnDistance / 100) > distanceCounter) {
@@ -102,19 +109,23 @@ void act(float dt)
 void draw()
 {
     // clear backbuffer
-    memset(buffer, 0, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(uint32_t));
+    memset(buffer, 1, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(uint32_t));
 
-    // background // TODO сделать отдельного наследника класса Drawable который будет
-    // рисовать объекты по своим локальным координатам. Сделать фон им. через него же 
-    // сделать и счёт
-    for (int i = 0; i < SCREEN_HEIGHT; ++i) {
-        for (int j = 0; j < SCREEN_WIDTH; ++j) {
+    // background 
+    
+    for(int i = 0; i < SCREEN_HEIGHT; ++i) {
+        for(int j = 0; j < SCREEN_WIDTH; ++j) {
             buffer[i][j] = kBackgroundColor;
         }
     }
+    
+    // TODO сделать отдельного наследника класса Drawable который будет
+    // рисовать объекты по своим локальным координатам. Сделать фон им. через него же 
+    // сделать и счёт
 
     // draw
-    GameObjectManager::getInstance().renderObjects(camera->getGlobalPosition());
+    GameObjectManager::getInstance().renderObjects(Vector2D(0, 0));
+    // GameObjectManager::getInstance().renderUI(Vector2D(0, 0));
 }
 
 // free game data in this function

@@ -7,8 +7,10 @@
 
 class GameObjectManager: public Singleton<GameObjectManager> {
   public:
-    void renderObjects(const Vector2D& camera_pos);
+    void renderObjects(const Vector2D& offset);
+    void renderUI(const Vector2D& offset);
     void addObject(std::shared_ptr<GameObject> object);
+    void addObjectUI(std::shared_ptr<GameObject> object);
 
     inline void addCamera(std::shared_ptr<GameObject> camera) { _mainCamera = camera; } 
     inline std::shared_ptr<GameObject> getCamera() { return _mainCamera; }
@@ -17,6 +19,7 @@ class GameObjectManager: public Singleton<GameObjectManager> {
 
   private:
     std::shared_ptr<GameObject> _rootGameObject = std::make_shared<GameObject>();
+    std::shared_ptr<GameObject> _rootGameObjectUI = std::make_shared<GameObject>();
     std::vector<std::shared_ptr<GameObject>> _colideableObjects;
     std::vector<std::shared_ptr<GameObject>> _rigidbodyObjects;
     std::shared_ptr<GameObject> _mainCamera;

@@ -2,9 +2,15 @@
 #include "../components/BoxCollider.h"
 #include "../components/Rigidbody2D.h"
 
-void GameObjectManager::renderObjects(const Vector2D& camera_pos) {
+void GameObjectManager::renderObjects(const Vector2D& offset) {
     for(auto object : _rootGameObject->getChildren()) {
-        object->render(Vector2D(0, 0));
+        object->render(offset);
+    }
+}
+
+void GameObjectManager::renderUI(const Vector2D& offset) {
+    for(auto object : _rootGameObjectUI->getChildren()) {
+        object->render(offset);
     }
 }
 
@@ -15,6 +21,11 @@ void GameObjectManager::addObject(std::shared_ptr<GameObject> object) {
     _rootGameObject->addChild(object);
     updateRigidbodyObjectsRecursivly(object);
     updateCollideableObjectsRecursivly(object);
+    updateGlobalPositionRecursivly(object, Vector2D(0, 0));
+}
+
+void GameObjectManager::addObjectUI(std::shared_ptr<GameObject> object) {
+    _rootGameObjectUI->addChild(object);
     updateGlobalPositionRecursivly(object, Vector2D(0, 0));
 }
 
