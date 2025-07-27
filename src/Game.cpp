@@ -22,9 +22,9 @@
 //  is_mouse_button_pressed(int button) - check if mouse button is pressed (0 -
 //  left button, 1 - right button) schedule_quit_game() - quit game after act()
 
-const int64_t kColumnDistance = 1000;
-const int64_t kColumnWidth = 200;
-const int64_t kColumnGapSize = 300;
+const int64_t kColumnDistance = 600;
+const int64_t kColumnWidth = 150;
+const int64_t kColumnGapSize = 250;
 const Vector2D kPlayerStartPosition = Vector2D(400, SCREEN_HEIGHT / 2);
 const Vector2D kPlayerSize = Vector2D(50, 50);
 
@@ -40,7 +40,7 @@ const int32_t kPlayerColor = EColors::red;
 const int32_t kColumnColor = EColors::green;
 const int32_t kBackgroundColor = EColors::white;
 
-const int64_t kJumpTimeoutSize = 150;
+const int64_t kJumpTimeoutSize = 250;
 
 /////////////////////////////////////////////////////
 
@@ -49,9 +49,10 @@ std::shared_ptr<GameObject> player;
 std::shared_ptr<FlappyBirdPlayer> flappyBirdPlayer;
 Vector2D cameraPosition;
 ColumnFactory factrory = ColumnFactory(kColumnWidth, kColumnGapSize, 400, kColumnColor);
+
 int64_t score = 0;
 int64_t distanceCounter = -1;
-int64_t jumpTimeoutUntil;
+int64_t jumpTimeoutUntil = 0;
 
 
 // initialize game data in this function
@@ -84,15 +85,16 @@ void act(float dt)
     cameraPosition.x = player->getLocalPosition().x - (SCREEN_WIDTH / 2); 
 
     score = (cameraPosition.x / 100);
-    if(score / 10 > distanceCounter) {
+    if(score / (kColumnDistance / 100) > distanceCounter) {
         ++distanceCounter;
-        auto obj = factrory.create(kColumnGapSize, 150 + (50 * (std::rand() % 6)));
-        obj->setLocalPosition(Vector2D(kColumnDistance * (score / 10) + kColumnDistance + 100, 0));
+        auto obj = factrory.create(kColumnGapSize - score, 150 + (50 * (std::rand() % 6)));
+        obj->setLocalPosition(Vector2D(kColumnDistance * ((score / (kColumnDistance / 100)) + 3) + 100, 0));
         GAME_OBJ_MNG.addObject(obj);
     }
 
     GAME_OBJ_MNG.simulatePhysics(dt);
 }
+
 // fill buffer in this function
 // uint32_t buffer[SCREEN_HEIGHT][SCREEN_WIDTH] - is an array of 32-bit colors
 // (8 bits per R, G, B)
