@@ -40,18 +40,24 @@ const int32_t kPlayerColor = EColors::red;
 const int32_t kColumnColor = EColors::green;
 const int32_t kBackgroundColor = EColors::white;
 
+const int64_t kJumpTimeoutSize = 150;
+
+/////////////////////////////////////////////////////
+
 GameObjectManager GAME_OBJ_MNG;
 std::shared_ptr<GameObject> player;
 std::shared_ptr<FlappyBirdPlayer> flappyBirdPlayer;
-Vector2D camera_position;
+Vector2D cameraPosition;
 ColumnFactory factrory = ColumnFactory(kColumnWidth, kColumnGapSize, 400, kColumnColor);
 int64_t score = 0;
 int64_t distanceCounter = -1;
+int64_t jumpTimeoutUntil;
+
 
 // initialize game data in this function
 void initialize()
 {
-    camera_position = Vector2D(0, 0);
+    cameraPosition = Vector2D(0, 0);
     player = std::make_shared<GameObject>();
     player->addComponent(std::make_shared<Rectangle>(kPlayerSize.x, kPlayerSize.y, kPlayerColor));
     player->addComponent(std::make_shared<BoxCollider>(kPlayerSize.x, kPlayerSize.y));
@@ -70,12 +76,14 @@ void act(float dt)
     if (is_key_pressed(VK_ESCAPE) || !flappyBirdPlayer->isAlive())
         schedule_quit_game();
 
-    if (is_key_pressed(VK_SPACE))
+    if (is_key_pressed(VK_SPACE) && cameraPosition.x > jumpTimeoutUntil) {
         flappyBirdPlayer->actionJump();
+        jumpTimeoutUntil = cameraPosition.x + kJumpTimeoutSize;
+    }
 
-    camera_position.x = player->getLocalPosition().x - (SCREEN_WIDTH / 2); 
+    cameraPosition.x = player->getLocalPosition().x - (SCREEN_WIDTH / 2); 
 
-    score = (camera_position.x / 100);
+    score = (cameraPosition.x / 100);
     if(score / 10 > distanceCounter) {
         ++distanceCounter;
         auto obj = factrory.create(kColumnGapSize, 150 + (50 * (std::rand() % 6)));
@@ -102,7 +110,7 @@ void draw()
     }
 
     // draw
-    GAME_OBJ_MNG.renderObjects(camera_position);
+    GAME_OBJ_MNG.renderObjects(cameraPosition);
 }
 
 // free game data in this function
