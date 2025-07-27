@@ -9,7 +9,7 @@ void GameObject::render(Vector2D offset) {
     }
 
     for(auto child : p_children) {
-        child->render(offset + child->getLocalPosition());
+        child->render(offset);
     }
 }
 

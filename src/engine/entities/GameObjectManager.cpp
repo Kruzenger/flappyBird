@@ -4,13 +4,13 @@
 
 void GameObjectManager::renderObjects(const Vector2D& camera_pos) {
     for(auto object : _rootGameObject->getChildren()) {
-        object->render(object->getLocalPosition().fromWorldToCamera(camera_pos));
+        object->render(Vector2D(0, 0));
     }
 }
 
 // TODO: Убрать зависимость от порядка добавления свойств. Нужно сделать
 // отдельный метод с добавлением и обработкой всех полей и свойств, а при
-// добавлении объекта в обработку и про добавлении новых компанент вызывать его.
+// добавлении объекта в обработку или при добавлении новых компанент вызывать его.
 void GameObjectManager::addObject(std::shared_ptr<GameObject> object) {
     _rootGameObject->addChild(object);
     updateRigidbodyObjectsRecursivly(object);

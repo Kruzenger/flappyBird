@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../entities/GameObject.h"
 #include "Drawable.h"
 
 class Rectangle : public Drawable {

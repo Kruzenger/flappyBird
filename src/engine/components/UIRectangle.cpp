@@ -1,15 +1,8 @@
-#include "Rectangle.h"
+#include "UIRectangle.h"
 #include "../entities/GameObjectManager.h"
 
-Rectangle::Rectangle(const uint64_t& hight, const uint64_t& width, const uint32_t& color): 
-    p_hight(hight),
-    p_width(width),
-    p_color(color) {}
-
-// Так как появилось понятие глобальных координат, то можно от офсета избавиться,
-// кажется лучше просто переписать метод, а офсет оставить на случай необхадимости сдвига
-void Rectangle::draw(Vector2D offset) {
-    auto startPoint = p_parentObject->getGlobalPosition()
+void UIRectangle::draw(Vector2D offset) {
+    auto startPoint = Rectangle::p_parentObject->getLocalPosition()
                                                 .fromWorldToCamera(GameObjectManager::getInstance()
                                                                                      .getCamera()
                                                                                     ->getGlobalPosition()) + offset; 

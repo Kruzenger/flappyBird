@@ -40,14 +40,13 @@ const int32_t kPlayerColor = EColors::red;
 const int32_t kColumnColor = EColors::green;
 const int32_t kBackgroundColor = EColors::white;
 
-const int64_t kJumpTimeoutSize = 250;
+const int64_t kJumpTimeoutSize = 200;
 
 /////////////////////////////////////////////////////
 
-GameObjectManager GAME_OBJ_MNG;
 std::shared_ptr<GameObject> player;
 std::shared_ptr<FlappyBirdPlayer> flappyBirdPlayer;
-Vector2D cameraPosition;
+std::shared_ptr<GameObject> camera;
 ColumnFactory factrory = ColumnFactory(kColumnWidth, kColumnGapSize, 400, kColumnColor);
 
 int64_t score = 0;
@@ -58,41 +57,43 @@ int64_t jumpTimeoutUntil = 0;
 // initialize game data in this function
 void initialize()
 {
-    cameraPosition = Vector2D(0, 0);
+    camera = std::make_shared<GameObject>();
+    GameObjectManager::getInstance().addCamera(camera);
+
     player = std::make_shared<GameObject>();
     player->addComponent(std::make_shared<Rectangle>(kPlayerSize.x, kPlayerSize.y, kPlayerColor));
     player->addComponent(std::make_shared<BoxCollider>(kPlayerSize.x, kPlayerSize.y));
     player->addComponent(std::make_shared<Rigidbody2D>(true));
     player->addComponent(flappyBirdPlayer = std::make_shared<FlappyBirdPlayer>());
     player->setLocalPosition(kPlayerStartPosition);
-    GAME_OBJ_MNG.addObject(player);
+    GameObjectManager::getInstance().addObject(player);
 }
 
 // this function is called to update game data,
 // dt - time elapsed since the previous update (in seconds)
 void act(float dt)
 {
-    GAME_OBJ_MNG.updateCollisions(); 
+    GameObjectManager::getInstance().updateCollisions(); 
     
     if (is_key_pressed(VK_ESCAPE) || !flappyBirdPlayer->isAlive())
         schedule_quit_game();
 
-    if (is_key_pressed(VK_SPACE) && cameraPosition.x > jumpTimeoutUntil) {
+    if (is_key_pressed(VK_SPACE) && camera->getGlobalPosition().x > jumpTimeoutUntil) {
         flappyBirdPlayer->actionJump();
-        jumpTimeoutUntil = cameraPosition.x + kJumpTimeoutSize;
+        jumpTimeoutUntil = camera->getGlobalPosition().x + kJumpTimeoutSize;
     }
 
-    cameraPosition.x = player->getLocalPosition().x - (SCREEN_WIDTH / 2); 
+    camera->setGlobalPosition(Vector2D(player->getGlobalPosition().x - (SCREEN_WIDTH / 2), 0)); 
 
-    score = (cameraPosition.x / 100);
+    score = (camera->getGlobalPosition().x / 100);
     if(score / (kColumnDistance / 100) > distanceCounter) {
         ++distanceCounter;
         auto obj = factrory.create(kColumnGapSize - score, 150 + (50 * (std::rand() % 6)));
         obj->setLocalPosition(Vector2D(kColumnDistance * ((score / (kColumnDistance / 100)) + 3) + 100, 0));
-        GAME_OBJ_MNG.addObject(obj);
+        GameObjectManager::getInstance().addObject(obj);
     }
 
-    GAME_OBJ_MNG.simulatePhysics(dt);
+    GameObjectManager::getInstance().simulatePhysics(dt);
 }
 
 // fill buffer in this function
@@ -104,7 +105,8 @@ void draw()
     memset(buffer, 0, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(uint32_t));
 
     // background // TODO сделать отдельного наследника класса Drawable который будет
-    // рисовать объекты по своим локальным координатам. Сделать фон им.
+    // рисовать объекты по своим локальным координатам. Сделать фон им. через него же 
+    // сделать и счёт
     for (int i = 0; i < SCREEN_HEIGHT; ++i) {
         for (int j = 0; j < SCREEN_WIDTH; ++j) {
             buffer[i][j] = kBackgroundColor;
@@ -112,7 +114,7 @@ void draw()
     }
 
     // draw
-    GAME_OBJ_MNG.renderObjects(cameraPosition);
+    GameObjectManager::getInstance().renderObjects(camera->getGlobalPosition());
 }
 
 // free game data in this function
