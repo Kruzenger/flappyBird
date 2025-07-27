@@ -70,7 +70,7 @@ void initialize()
     player->setLocalPosition(kPlayerStartPosition);
     GameObjectManager::getInstance().addObject(player);
 
-    auto scoreBaner = std::make_shared<GameObject>();
+    std::shared_ptr<GameObject> scoreBaner = std::make_shared<GameObject>();
     scoreBaner->addComponent(std::make_shared<RectangleUI>(50, 300, EColors::black));
     scoreBaner->setLocalPosition(50, SCREEN_HEIGHT - 100);
     GameObjectManager::getInstance().addObjectUI(scoreBaner);
@@ -95,7 +95,7 @@ void act(float dt)
     score = (camera->getGlobalPosition().x / 100);
     if(score / (kColumnDistance / 100) > distanceCounter) {
         ++distanceCounter;
-        auto obj = factrory.create(kColumnGapSize - score, 150 + (50 * (std::rand() % 6)));
+        std::shared_ptr<GameObject> obj = factrory.create(kColumnGapSize - score, 150 + (50 * (std::rand() % 6)));
         obj->setLocalPosition(Vector2D(kColumnDistance * ((score / (kColumnDistance / 100)) + 3) + 100, 0));
         GameObjectManager::getInstance().addObject(obj);
     }
