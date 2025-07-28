@@ -9,7 +9,8 @@ Rectangle::Rectangle(const uint64_t& hight, const uint64_t& width, const uint32_
 // Так как появилось понятие глобальных координат, то можно от офсета избавиться,
 // кажется лучше просто переписать метод, а офсет оставить на случай необхадимости сдвига
 void Rectangle::draw(Vector2D offset) {
-    auto startPoint = p_parentObject->getGlobalPosition()
+    auto sharedParentObject = p_parentObject.lock();
+    auto startPoint = sharedParentObject->getGlobalPosition()
                                                 .fromWorldToCamera(GameObjectManager::getInstance()
                                                                                      .getCamera()
                                                                                     ->getGlobalPosition()) + offset; 

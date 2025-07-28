@@ -7,5 +7,6 @@ void Rigidbody2D::simulatePhysics(const float& dt) {
     if (p_isAffectedByGravity) {
         p_velocity += kGForceDirection * dt * (kGForce * 4);
     }
-    p_parentObject->changePosition(p_velocity * dt * kSpeed);
+    auto sharedParentObject = p_parentObject.lock();
+    sharedParentObject->changePosition(p_velocity * dt * kSpeed);
 }

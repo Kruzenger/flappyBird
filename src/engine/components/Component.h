@@ -15,7 +15,7 @@ class Component : public std::enable_shared_from_this<Component> {
     void setParentObject(std::shared_ptr<GameObject> object);
     
   protected:
-    std::shared_ptr<GameObject> p_parentObject;
+    std::weak_ptr<GameObject> p_parentObject;
 };
 
 inline Component::~Component() {}

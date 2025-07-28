@@ -2,8 +2,9 @@
 #include "../Engine.h"
 
 void FlappyBirdPlayer::onParentGameObjectInit() {
-    p_collider = p_parentObject->findComponentByTypeName<BoxCollider>("BoxCollider");
-    p_rigidbody = p_parentObject->findComponentByTypeName<Rigidbody2D>("Rigidbody2D");
+    auto sharedParentObject = p_parentObject.lock();
+    p_collider = sharedParentObject->findComponentByTypeName<BoxCollider>("BoxCollider");
+    p_rigidbody = sharedParentObject->findComponentByTypeName<Rigidbody2D>("Rigidbody2D");
 }
 
 void FlappyBirdPlayer::actionJump() const { 
@@ -11,6 +12,9 @@ void FlappyBirdPlayer::actionJump() const {
 }
 
 bool FlappyBirdPlayer::isAlive() const { 
-    return p_collider->getCollisions().empty() && p_parentObject->getGlobalPosition().y < SCREEN_HEIGHT && p_parentObject->getGlobalPosition().y > 0; 
+    auto sharedParentObject = p_parentObject.lock();
+    return  p_collider->getCollisions().empty() && 
+            sharedParentObject->getGlobalPosition().y < SCREEN_HEIGHT && 
+            sharedParentObject->getGlobalPosition().y > 0; 
 
 }
